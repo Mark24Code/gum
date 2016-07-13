@@ -17,7 +17,7 @@ var router = express.Router();
 router.get('/',site.index);
 
 //expamle
-router.get('/expamle',example.index);
+router.get('/example',example.index);
 
 
 module.exports = router;

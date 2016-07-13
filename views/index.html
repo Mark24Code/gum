@@ -1,17 +1,8 @@
 {% extends 'base.html' %}
 
-{% block title %}index {{title}} {%endblock%}
+{% block title %}Index{%endblock%}
 
 {% block content %}
-标题:{{title}}
-用户数据:{{user}}
-列表:
-<ul>
-{% for item in arr %}
-    <li>{{item}}</li>
-{% endfor %}
-</ul>
-
-<hr>
-<p>This is just an awesome page.</p>
+<h1>Hello World!</h1>
+<h2>This is the Index</h2>
 {% endblock %}
