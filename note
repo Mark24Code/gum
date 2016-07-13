@@ -1,0 +1,4 @@
+{# <script type="text/javascript" src="jquery.sortable.js"></script>
+<script type="text/javascript">
+    $('.sortable').sortable();
+</script> #}

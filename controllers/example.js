@@ -1,4 +1,4 @@
 
 exports.index = function(req,res,next){
-    res.render('example',{'example':'atom'});
+    res.render('example',{'example':'This is example'});
 }

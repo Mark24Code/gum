@@ -1,10 +1,52 @@
 {% extends 'base.html' %}
 
-{% block title %}Example{%endblock%}
+{% block title %}Example{% endblock %}
+
+{% block head_style %}
+<style type="text/css">
+    .testbox{
+        width: 100%;
+        height: 200px;
+        background-color:#4F4D3F;
+        text-align: center;
+        color:white;
+    }
+    .testbox ul{
+        margin:auto;
+        padding-top: 20px;
+    }
+    .testbox ul li{
+        height: auto;
+        width: 80%;
+        background-color:#DEDDDC;
+        margin:5px auto 5px auto;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <h1>This is Example Page</h1>
 <h2>测试参数：{{example}}</h2>
+<h3><a href="/">返回首页</a></h3>
 <hr>
 <h1>排序实例</h1>
+<div class="testbox">
+    <ul class="sortable">
+        <li>Item 1</li>
+        <li>Item 2</li>
+        <li>Item 3</li>
+        <li>Item 4</li>
+    </ul>
+</div>
+
+
+{% endblock %}
+
+{% block content_script %}
+
+<!-- 引入jQuery和Sea.js -->
+<!-- <script type="text/javascript" src="jquery.sortable.js"></script>
+<script type="text/javascript">
+    $('.sortable').sortable();
+</script> -->
 {% endblock %}
