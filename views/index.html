@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block title %}index {{title}} {%endblock%}
+
+{% block content %}
+标题:{{title}}
+用户数据:{{user}}
+列表:
+<ul>
+{% for item in arr %}
+    <li>{{item}}</li>
+{% endfor %}
+</ul>
+
+<hr>
+<p>This is just an awesome page.</p>
+{% endblock %}
