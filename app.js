@@ -1,3 +1,8 @@
+/*!
+ * app.js
+ */
+
+/* Module dependencies.模块依赖 */
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -6,9 +11,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var swig = require('swig');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+/* Router.路由 */
+var webRouter = require('./web_router');
+var apiRouterV1 = require('./api_router_v1');
 
+/* App.应用实例 */
 var app = express();
 
 // view engine setup
@@ -24,8 +31,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
+//router
+app.use('/api/v1',apiRouterV1);
+app.use('/', webRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
