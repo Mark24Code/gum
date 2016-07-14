@@ -104,6 +104,13 @@
             placeholder:"<div>4555</div>",
             forcePlaceholderSize: true
         });
+        //追加去添加事件
+        sortable5('.testbox-ul1')[0].addEventListener('sortstart',function(e){
+            console.log('-- start --');
+        });
+        sortable5('.testbox-ul1')[0].addEventListener('sortstop',function(e){
+            console.log('-- stop --');
+        });
         sortable5('.testbox-ul2',{
             connectWith:'cf',
             handle:'span',
