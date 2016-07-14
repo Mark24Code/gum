@@ -4,34 +4,38 @@
 
 {% block head_style %}
 <style type="text/css">
-    .testbox{
+    .testbox1,.testbox2{
         width: 100%;
         height: 200px;
         background-color:#4F4D3F;
         text-align: center;
         color:white;
     }
-    .testbox ul{
+    .testbox1 ul,.testbox2 ul{
         margin:auto;
         padding-top: 20px;
     }
-    .testbox ul li{
-        height: auto;
+    .testbox1 ul li,.testbox2 ul li{
+        height: 30px;
         width: 80%;
         background-color:#DEDDDC;
         margin:5px auto 5px auto;
     }
-    .testbox ul li.item-1{
+    .testbox1 ul li.item-1{
         background-color: red;
     }
-    .testbox ul li.item-2{
+    .testbox1 ul li.item-2{
         background-color: blue;
     }
-    .testbox ul li.item-3{
+    .testbox1 ul li.item-3{
         background-color: green;
     }
-    .testbox ul li.item-4{
+    .testbox1 ul li.item-4{
         background-color: grey;
+    }
+    .placeClass {
+        border: 1px #f50;
+        background-color: red;
     }
 </style>
 {% endblock %}
@@ -42,8 +46,8 @@
 <h3><a href="/">返回首页</a></h3>
 <hr>
 <h1>排序实例</h1>
-<div class="testbox">
-    <ul class="testbox-ul">
+<div class="testbox1">
+    <ul class="testbox-ul1">
         <li class="item-1">Item 1</li>
         <li class="item-2">Item 2</li>
         <li class="item-3">Item 3</li>
@@ -51,7 +55,14 @@
     </ul>
 </div>
 
-
+<div class="testbox2">
+    <ul class="testbox-ul2">
+        <li class="item-1">Item 1</li>
+        <li class="item-2">Item 2</li>
+        <li class="item-3">Item 3</li>
+        <li class="item-4">Item 4</li>
+    </ul>
+</div>
 {% endblock %}
 
 {% block content_script %}
@@ -62,13 +73,32 @@
 
     // seajs.use(['jquery','sortable'],function($){
     //     console.log('sortable prepare');
-    //     $('.testbox-ul').sortable();
+    //     $('.testbox-ul').sortable({
+    //         // items:'ul>li',
+    //         // handle:'ul',
+    //         // forcePlaceholderSize: true,
+    //         // connectWith:'.connected'
+    //         // placeholderClass:'.testbox-ul'
+    //     });
+
+    //     $('.testbox-ul').sortable({
+    //         // items:'li',
+    //         // handle:'ul',
+    //         forcePlaceholderSize: true,
+    //         connectWith:'.connected'
+    //         // placeholderClass:'.testbox-ul'
+    //     });
 
     // });
+
     seajs.use(['jquery','sortable5'],function($,sortable5){
         console.log('sortable prepare');
-        sortable5('.testbox-ul');
-
+        sortable5('.testbox-ul1',{
+            connectWith:'cf'
+        });
+        sortable5('.testbox-ul2',{
+            connectWith:'cf'
+        });
     });
 </script>
 {% endblock %}
