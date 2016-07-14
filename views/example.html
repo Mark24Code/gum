@@ -12,6 +12,10 @@
         color:white;
     }
     .testbox1 ul,.testbox2 ul{
+        padding: 5px;
+        background-color:#1093EF;
+    }
+    .testbox1 ul,.testbox2 ul{
         margin:auto;
         padding-top: 20px;
     }
@@ -20,6 +24,12 @@
         width: 80%;
         background-color:#DEDDDC;
         margin:5px auto 5px auto;
+    }
+
+    .testbox1 ul li span,.testbox2 ul li span{
+        height: 30px;
+        width: 80%;
+        background-color:#F9A01C;
     }
     .testbox1 ul li.item-1{
         background-color: red;
@@ -34,6 +44,12 @@
         background-color: grey;
     }
     .addModule {border: 1px dashed #f50; margin: 0 0 10px;}
+    .testbox1 div,.testbox2 div{
+        height: 25px;
+        width: 80%;
+        margin:auto;
+        background-color:#551A8B;
+    }
 </style>
 {% endblock %}
 
@@ -45,19 +61,24 @@
 <h1>排序实例</h1>
 <div class="testbox1">
     <ul class="testbox-ul1">
-        <li class="item-1">Item 1</li>
-        <li class="item-2">Item 2</li>
-        <li class="item-3">Item 3</li>
-        <li class="item-4">Item 4</li>
+        <li class="item-1"><span>Item 1</span></li>
+        <li class="item-2"><span>Item 2</span></li>
+        <li class="item-3"><span>Item 3</span></li>
+        <li class="item-4"><span>Item 4</span></li>
+        <div><span>Item 5</span></div>
     </ul>
 </div>
 
+<div class="testbox1">
+
+</div>
 <div class="testbox2">
     <ul class="testbox-ul2">
-        <li class="item-1">Item 1</li>
-        <li class="item-2">Item 2</li>
-        <li class="item-3">Item 3</li>
-        <li class="item-4">Item 4</li>
+        <li class="item-1"><span>Item 1</span></li>
+        <li class="item-2"><span>Item 2</span></li>
+        <li class="item-3"><span>Item 3</span></li>
+        <li class="item-4"><span>Item 4</span></li>
+
     </ul>
 </div>
 {% endblock %}
@@ -75,11 +96,19 @@
         */
         sortable5('.testbox-ul1',{
             connectWith:'cf',
-            placeholderClass:'addModule'
+            handle:'span',
+            items:'div',
+            placeholderClass:'addModule',
+            placeholder:"<div>4555</div>",
+            forcePlaceholderSize: true
         });
         sortable5('.testbox-ul2',{
             connectWith:'cf',
-            placeholderClass:'addModule'
+            handle:'span',
+            items:'li',
+            placeholderClass:'addModule',
+            placeholder:"<div>4555</div>",
+            forcePlaceholderSize: true
         });
     });
 </script>
