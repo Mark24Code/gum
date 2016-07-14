@@ -33,10 +33,7 @@
     .testbox1 ul li.item-4{
         background-color: grey;
     }
-    .placeClass {
-        border: 1px #f50;
-        background-color: red;
-    }
+    .addModule {border: 1px dashed #f50; margin: 0 0 10px;}
 </style>
 {% endblock %}
 
@@ -70,34 +67,19 @@
     seajs.use(['/static/javascripts/other'],function(Other){
         Other.other();
     });
-
-    // seajs.use(['jquery','sortable'],function($){
-    //     console.log('sortable prepare');
-    //     $('.testbox-ul').sortable({
-    //         // items:'ul>li',
-    //         // handle:'ul',
-    //         // forcePlaceholderSize: true,
-    //         // connectWith:'.connected'
-    //         // placeholderClass:'.testbox-ul'
-    //     });
-
-    //     $('.testbox-ul').sortable({
-    //         // items:'li',
-    //         // handle:'ul',
-    //         forcePlaceholderSize: true,
-    //         connectWith:'.connected'
-    //         // placeholderClass:'.testbox-ul'
-    //     });
-
-    // });
-
     seajs.use(['jquery','sortable5'],function($,sortable5){
         console.log('sortable prepare');
+        /*注释
+        1.connectWith 是任意 字符串
+        2.placeholderClass是class类名，不加点.定义一个样式
+        */
         sortable5('.testbox-ul1',{
-            connectWith:'cf'
+            connectWith:'cf',
+            placeholderClass:'addModule'
         });
         sortable5('.testbox-ul2',{
-            connectWith:'cf'
+            connectWith:'cf',
+            placeholderClass:'addModule'
         });
     });
 </script>
