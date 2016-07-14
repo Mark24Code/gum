@@ -60,9 +60,14 @@
         Other.other();
     });
 
-    seajs.use(['jquery','sortable'],function($){
+    // seajs.use(['jquery','sortable'],function($){
+    //     console.log('sortable prepare');
+    //     $('.testbox-ul').sortable();
+
+    // });
+    seajs.use(['jquery','sortable5'],function($,sortable5){
         console.log('sortable prepare');
-        $('.testbox-ul').sortable();
+        sortable5('.testbox-ul');
 
     });
 </script>
