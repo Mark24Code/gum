@@ -24,6 +24,10 @@
 </style>
 {% endblock %}
 
+{% block head_script %}
+<script src="/static/javascripts/sea/2.3.0/sea.js"></script>
+{% endblock %}
+
 {% block content %}
 <h1>This is Example Page</h1>
 <h2>测试参数：{{example}}</h2>
@@ -43,10 +47,9 @@
 {% endblock %}
 
 {% block content_script %}
-
-<!-- 引入jQuery和Sea.js -->
-<!-- <script type="text/javascript" src="jquery.sortable.js"></script>
 <script type="text/javascript">
-    $('.sortable').sortable();
-</script> -->
+    seajs.use(['/static/javascripts/other'],function(Other){
+        Other.other();
+    });
+</script>
 {% endblock %}
