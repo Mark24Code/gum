@@ -1,13 +1,5 @@
 define(function(require, exports, module){
-;(function(root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    define([], factory);
-  } else if (typeof exports === 'object') {
-    module.exports = factory();
-  } else {
-    root.sortable = factory();
-  }
-}(this, function() {
+
 /*
  * HTML5 Sortable library
  * https://github.com/voidberg/html5sortable
@@ -555,7 +547,6 @@ var sortable = function(sortableElements, options) {
       _attr(dragging, 'aria-grabbed', 'true');
       // grab values
       index = _index(dragging);
-      console.log(index);
       draggingHeight = parseInt(window.getComputedStyle(dragging).height);
       startParent = this.parentElement;
       // dispatch sortstart event on each element in group
@@ -563,7 +554,7 @@ var sortable = function(sortableElements, options) {
         item: dragging,
         placeholder: placeholder,
         startparent: startParent,
-        index:index//add new
+        index:index
       }));
     });
     // Handle drag events on draggable items
@@ -581,26 +572,25 @@ var sortable = function(sortableElements, options) {
       placeholders.forEach(_detach);
       newParent = this.parentElement;
       _dispatchEventOnConnected(sortableElement, _makeEvent('sortstop', {
-            item: dragging,
-            index: _filter(newParent.children, _data(newParent, 'items'))
-              .indexOf(dragging),
-            oldindex: items.indexOf(dragging),
-            elementIndex: _index(dragging),
-            oldElementIndex: index,
-            startparent: startParent,
-            endparent: newParent
-
+          item: dragging,
+          index: _filter(newParent.children, _data(newParent, 'items'))
+            .indexOf(dragging),
+          oldindex: items.indexOf(dragging),
+          elementIndex: _index(dragging),
+          oldElementIndex: index,
+          startparent: startParent,
+          endparent: newParent
       }));
       if (index !== _index(dragging) || startParent !== newParent) {
         _dispatchEventOnConnected(sortableElement, _makeEvent('sortupdate', {
-            item: dragging,
-            index: _filter(newParent.children, _data(newParent, 'items'))
-              .indexOf(dragging),
-            oldindex: items.indexOf(dragging),
-            elementIndex: _index(dragging),
-            oldElementIndex: index,
-            startparent: startParent,
-            endparent: newParent
+          item: dragging,
+          index: _filter(newParent.children, _data(newParent, 'items'))
+            .indexOf(dragging),
+          oldindex: items.indexOf(dragging),
+          elementIndex: _index(dragging),
+          oldElementIndex: index,
+          startparent: startParent,
+          endparent: newParent
         }));
       }
       dragging = null;
@@ -693,9 +683,24 @@ sortable.disable = function(sortableElement) {
   _disableSortable(sortableElement);
 };
 
-
-return sortable;
-}));
+/* start-testing */
+sortable.__testing = {
+  // add internal methods here for testing purposes
+  _data: _data,
+  _removeSortableEvents: _removeSortableEvents,
+  _removeItemEvents: _removeItemEvents,
+  _removeItemData: _removeItemData,
+  _removeSortableData: _removeSortableData,
+  _listsConnected: _listsConnected,
+  _attachGhost: _attachGhost,
+  _addGhostPos: _addGhostPos,
+  _getGhost: _getGhost,
+  _makeGhost: _makeGhost,
+  _index: _index,
+  _makeEvent: _makeEvent
+};
+module.exports = sortable;
+/* end-testing */
 
 
 
