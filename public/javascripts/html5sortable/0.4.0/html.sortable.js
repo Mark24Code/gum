@@ -407,12 +407,16 @@ var _detach = function(element) {
  * @param {object} detail
  * @returns {CustomEvent}
  */
-var _makeEvent = function(name, detail) {
+var _makeEvent = function(name, detail,callback) {
   var e = document.createEvent('Event');
   if (detail) {
     e.detail = detail;
   }
   e.initEvent(name, false, true);
+
+  if(callback){
+    callback(detail);
+  }
   return e;
 };
 /**
@@ -444,7 +448,8 @@ var sortable = function(sortableElements, options) {
       disableIEFix: false,
       placeholderClass: 'sortable-placeholder',
       draggingClass: 'sortable-dragging',
-      hoverClass: false
+      hoverClass: false,
+      transferModel:{template:"<div></div>"}
     };
     for (var option in options) {
       result[option] = options[option];
@@ -550,12 +555,32 @@ var sortable = function(sortableElements, options) {
       draggingHeight = parseInt(window.getComputedStyle(dragging).height);
       startParent = this.parentElement;
       // dispatch sortstart event on each element in group
+
       _dispatchEventOnConnected(sortableElement, _makeEvent('sortstart', {
         item: dragging,
         placeholder: placeholder,
         startparent: startParent,
         index:index
       }));
+
+      //clone data 模式
+      if(options.transferModel){
+        //index 拖动时索引
+        //startParent 拖动时母
+        //dragging 拖动时对象
+        console.log('-------------------');
+        console.log('transferModel');
+        var items_length = startParent.children.length;
+        var target;
+        var dragging_clone = dragging.cloneNode(true);
+        if(items_length == index){
+          target = startParent.children[index-1];
+          _after(target,dragging_clone);
+        }else{
+          target = startParent.children[index];
+          _before(target,dragging_clone);
+        }
+      }
     });
     // Handle drag events on draggable items
     _on(items, 'dragend', function() {
@@ -593,8 +618,31 @@ var sortable = function(sortableElements, options) {
           endparent: newParent
         }));
       }
-      dragging = null;
-      draggingHeight = null;
+
+       //clone data 模式
+       if(options.transferModel){
+         console.log('-------------');
+         console.log('drag end');
+          var oldindex = items.indexOf(dragging);
+          var insert_tmpl = options.transferModel.template || "<div></div>";
+          console.log(startParent);
+          console.log(newParent);
+          if(startParent==newParent){
+            console.log('>>>>>');
+            var delete_node = startParent.children[oldindex];
+            console.log(delete_node);
+            startParent.removeChild(delete_node);
+          }
+          dragging = null;
+          draggingHeight = null;
+
+          sortable(startParent,options);
+       }
+
+        dragging = null;
+        draggingHeight = null;
+
+
     });
     // Handle drop event on sortable & placeholder
     // TODO: REMOVE placeholder?????
