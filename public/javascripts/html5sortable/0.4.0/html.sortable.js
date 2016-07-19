@@ -552,9 +552,9 @@ var sortable = function(sortableElements, options) {
       // dispatch sortstart event on each element in group
       _dispatchEventOnConnected(sortableElement, _makeEvent('sortstart', {
         item: dragging,
+        index:index,
         placeholder: placeholder,
-        startparent: startParent,
-        index:index
+        startparent: startParent
       }));
     });
     // Handle drag events on draggable items
@@ -572,14 +572,14 @@ var sortable = function(sortableElements, options) {
       placeholders.forEach(_detach);
       newParent = this.parentElement;
       _dispatchEventOnConnected(sortableElement, _makeEvent('sortstop', {
-          item: dragging,
-          index: _filter(newParent.children, _data(newParent, 'items'))
-            .indexOf(dragging),
-          oldindex: items.indexOf(dragging),
-          elementIndex: _index(dragging),
-          oldElementIndex: index,
-          startparent: startParent,
-          endparent: newParent
+        item: dragging,
+        startparent: startParent,
+        endparent: newParent,
+        oldindex: items.indexOf(dragging),
+        oldElementIndex: index,
+        elementIndex: _index(dragging),
+        index: _filter(newParent.children, _data(newParent, 'items'))
+            .indexOf(dragging)
       }));
       if (index !== _index(dragging) || startParent !== newParent) {
         _dispatchEventOnConnected(sortableElement, _makeEvent('sortupdate', {
