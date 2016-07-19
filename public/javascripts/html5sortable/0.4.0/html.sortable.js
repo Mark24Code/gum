@@ -555,13 +555,15 @@ var sortable = function(sortableElements, options) {
       _attr(dragging, 'aria-grabbed', 'true');
       // grab values
       index = _index(dragging);
+      console.log(index);
       draggingHeight = parseInt(window.getComputedStyle(dragging).height);
       startParent = this.parentElement;
       // dispatch sortstart event on each element in group
       _dispatchEventOnConnected(sortableElement, _makeEvent('sortstart', {
         item: dragging,
         placeholder: placeholder,
-        startparent: startParent
+        startparent: startParent,
+        index:index//add new
       }));
     });
     // Handle drag events on draggable items
@@ -579,19 +581,26 @@ var sortable = function(sortableElements, options) {
       placeholders.forEach(_detach);
       newParent = this.parentElement;
       _dispatchEventOnConnected(sortableElement, _makeEvent('sortstop', {
-        item: dragging,
-        startparent: startParent
+            item: dragging,
+            index: _filter(newParent.children, _data(newParent, 'items'))
+              .indexOf(dragging),
+            oldindex: items.indexOf(dragging),
+            elementIndex: _index(dragging),
+            oldElementIndex: index,
+            startparent: startParent,
+            endparent: newParent
+
       }));
       if (index !== _index(dragging) || startParent !== newParent) {
         _dispatchEventOnConnected(sortableElement, _makeEvent('sortupdate', {
-          item: dragging,
-          index: _filter(newParent.children, _data(newParent, 'items'))
-            .indexOf(dragging),
-          oldindex: items.indexOf(dragging),
-          elementIndex: _index(dragging),
-          oldElementIndex: index,
-          startparent: startParent,
-          endparent: newParent
+            item: dragging,
+            index: _filter(newParent.children, _data(newParent, 'items'))
+              .indexOf(dragging),
+            oldindex: items.indexOf(dragging),
+            elementIndex: _index(dragging),
+            oldElementIndex: index,
+            startparent: startParent,
+            endparent: newParent
         }));
       }
       dragging = null;
