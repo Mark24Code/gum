@@ -563,13 +563,10 @@ var sortable = function(sortableElements, options) {
         index:index
       }));
 
-      //clone data 模式
+      //clone data 模式 ********** start
       if(options.transferModel){
-        //index 拖动时索引
-        //startParent 拖动时母
-        //dragging 拖动时对象
-        console.log('-------------------');
-        console.log('transferModel');
+        //index 拖动时索引,startParent 拖动时母,dragging 拖动时对象
+        //clone效果
         var items_length = startParent.children.length;
         var target;
         var dragging_clone = dragging.cloneNode(true);
@@ -581,6 +578,7 @@ var sortable = function(sortableElements, options) {
           _before(target,dragging_clone);
         }
       }
+      //clone data 模式 ********** end
     });
     // Handle drag events on draggable items
     _on(items, 'dragend', function() {
@@ -619,28 +617,27 @@ var sortable = function(sortableElements, options) {
         }));
       }
 
-       //clone data 模式
-       if(options.transferModel){
-         console.log('-------------');
-         console.log('drag end');
+       //clone data 模式 ********** start
+      if(options.transferModel){
+
           var oldindex = items.indexOf(dragging);
           var insert_tmpl = options.transferModel.template || "<div></div>";
-          console.log(startParent);
-          console.log(newParent);
+
+          //去重
           if(startParent==newParent){
-            console.log('>>>>>');
             var delete_node = startParent.children[oldindex];
-            console.log(delete_node);
             startParent.removeChild(delete_node);
           }
-          dragging = null;
-          draggingHeight = null;
+          //数据传输
 
+
+          //reload
           sortable(startParent,options);
-       }
+      }
+      //clone data 模式 ********** end
 
-        dragging = null;
-        draggingHeight = null;
+      dragging = null;
+      draggingHeight = null;
 
 
     });
