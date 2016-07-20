@@ -107,7 +107,9 @@
             forcePlaceholderSize: true,
             transferModel:function(api_obj){
                   //1.准备模板
-                  var tmpl = "<p><span>5555</span></p>";
+                   //1.准备模板
+                  var text = api_obj.item.innerText;
+                  var tmpl = "<div><span>"+text+"</span></div>";
                   var tmplE = document.createElement('div');
                   tmplE.innerHTML = tmpl;
                   tmpl = tmplE.childNodes[0];
@@ -118,16 +120,7 @@
                     tmpl.setAttribute(attr,attr_val);
                   }
                   //3.插入
-                  var new_items_length = api_obj.endparent.children.length;
-                  var new_target;
-                  if(api_obj.index == new_items_length){
-                      new_target = api_obj.endparent.children[api_obj.new_index-1];
-                      api_obj.after(new_target,tmpl);
-                  }else{
-                      new_target = api_obj.endparent.children[api_obj.index];
-                      api_obj.before(new_target,tmpl);
-                  }
-            }
+                  api_obj.insertTmpl(tmpl);            }
 
         });
 
