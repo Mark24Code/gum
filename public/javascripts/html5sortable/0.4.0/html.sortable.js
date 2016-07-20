@@ -407,16 +407,12 @@ var _detach = function(element) {
  * @param {object} detail
  * @returns {CustomEvent}
  */
-var _makeEvent = function(name, detail,callback) {
+var _makeEvent = function(name, detail) {
   var e = document.createEvent('Event');
   if (detail) {
     e.detail = detail;
   }
   e.initEvent(name, false, true);
-
-  if(callback){
-    callback(detail);
-  }
   return e;
 };
 /**
@@ -556,7 +552,6 @@ var sortable = function(sortableElements, options) {
       draggingHeight = parseInt(window.getComputedStyle(dragging).height);
       startParent = this.parentElement;
       // dispatch sortstart event on each element in group
-
       _dispatchEventOnConnected(sortableElement, _makeEvent('sortstart', {
         item: dragging,
         placeholder: placeholder,
