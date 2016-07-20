@@ -106,21 +106,21 @@
             placeholder:"<div>4555</div>",
             forcePlaceholderSize: true,
             transferModel:function(api_obj){
-                  //1.准备模板
-                   //1.准备模板
-                  var text = api_obj.item.innerText;
-                  var tmpl = "<div><span>"+text+"</span></div>";
-                  var tmplE = document.createElement('div');
-                  tmplE.innerHTML = tmpl;
-                  tmpl = tmplE.childNodes[0];
-                  //2.属性交换
-                  var attr = "cid";
-                  var attr_val = api_obj.item.getAttribute(attr) || "";
-                  if(attr){
-                    tmpl.setAttribute(attr,attr_val);
-                  }
-                  //3.插入
-                  api_obj.insertTmpl(tmpl);            }
+                //1.准备模板
+                var text = api_obj.item.innerText;
+                var tmpl = "<div><span>"+text+"</span></div>";
+                var tmplE = document.createElement('div');
+                tmplE.innerHTML = tmpl;
+                tmpl = tmplE.childNodes[0];
+                //2.属性交换
+                var attr = "cid";
+                var attr_val = api_obj.item.getAttribute(attr) || "";
+                if(attr){
+                  tmpl.setAttribute(attr,attr_val);
+                }
+                //3.插入
+                api_obj.insertTmpl(tmpl);
+              }
 
         });
 

@@ -255,6 +255,21 @@ var _listsConnected = function(curList, destList) {
   }
   return false;
 };
+//检查联系
+var _CheckConnected = function(curList, destList) {
+  if (curList === destList) {
+    return 0;//自己对自己
+  }
+  if (_data(curList, 'connectWith') !== undefined) {
+    if(_data(curList, 'connectWith') === _data(destList, 'connectWith')){
+      return 1;//彼此联系
+    }else{
+      return -1;//无联系
+    }
+  }
+  return -1;//无联系
+};
+
 var _getHandles = function(items, handle) {
   var result = [];
   var handles;
@@ -446,7 +461,7 @@ var sortable = function(sortableElements, options) {
       draggingClass: 'sortable-dragging',
       hoverClass: false,
       cloneModel:false,
-      transferModel:undefined//{template:"<div></div>"}
+      transferModel:undefined//function(arg_obj){...}
     };
     for (var option in options) {
       result[option] = options[option];
@@ -566,6 +581,7 @@ var sortable = function(sortableElements, options) {
         var items_length = startParent.children.length;
         var target;
         var dragging_clone = dragging.cloneNode(true);
+        dragging_clone.setAttribute('clone',true);
         if(items_length == index){
           target = startParent.children[index-1];
           _after(target,dragging_clone);
@@ -599,6 +615,14 @@ var sortable = function(sortableElements, options) {
       var oldElementIndex = _index(dragging);
       var startparent = startParent;
       var endparent = newParent;
+      console.log('=========>');
+      console.log(endparent);
+      console.log('=========>22');
+      console.log(startparent);
+      if(startparent === endparent){
+        console.log('NB');
+      }
+
       //dragend事件,内部public接口属性
       var args = {
         item: item,
@@ -618,24 +642,28 @@ var sortable = function(sortableElements, options) {
        //transferModel 模式 ********** start
       if(options.connectWith && options.transferModel){
           //去重
-          if(startparent==endparent){
-            var delete_node = startparent.children[oldindex];
+          if(startparent === endparent){
+            var delete_node = document.querySelector("[clone]");
             startparent.removeChild(delete_node);
           }
+
           //重载源节点
           sortable(startparent,options);
 
           //暴露给外部callback
           function insertTmpl(tmpl){
-              var new_items_length = endparent.children.length;
-              var new_target;
-              if(index == new_items_length){
-                  new_target = endparent.children[index-1];
-                  _after(new_target,tmpl);
-              }else{
-                  new_target = endparent.children[index];
-                  _before(new_target,tmpl);
+              if(startparent !== endparent){
+                var new_items_length = endparent.children.length;
+                var new_target;
+                if(index == new_items_length){
+                    new_target = endparent.children[index-1];
+                    _after(new_target,tmpl);
+                }else{
+                    new_target = endparent.children[index];
+                    _before(new_target,tmpl);
+                }
               }
+
           }
           var api_obj = {
               item: item,//当前拖拽元素
@@ -655,7 +683,10 @@ var sortable = function(sortableElements, options) {
           process_callback(api_obj);
 
           //删除占位
-          endparent.removeChild(item);
+          if(startparent !== endparent){
+              endparent.removeChild(item);
+          }
+
           //重载源节点
           sortable(endparent,options);
 
@@ -674,6 +705,15 @@ var sortable = function(sortableElements, options) {
       if (!_listsConnected(sortableElement, dragging.parentElement)) {
         return;
       }
+      // tranferModel 模式 ******** start
+      if(options.transferModel){
+        var checkConnTag = _CheckConnected(sortableElement, dragging.parentElement);
+        if(checkConnTag === 0 || checkConnTag === -1){
+          return;
+        }
+      }
+      // tranferMode 模式 ********  end
+
 
       e.preventDefault();
       e.stopPropagation();
