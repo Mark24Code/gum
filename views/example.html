@@ -84,6 +84,8 @@
 {% endblock %}
 
 {% block content_script %}
+
+
 <script type="text/javascript">
     seajs.use(['/static/javascripts/other'],function(Other){
         Other.other();
@@ -103,14 +105,28 @@
             placeholderClass:'addModule',
             placeholder:"<div>4555</div>",
             forcePlaceholderSize: true,
-            transferModel:function(item){
-
-
-                return {
-                    attr:'cid',
-                    data:'data',
-                    template:'<div><span>{{text}}</span></div>'
-                };
+            transferModel:function(api_obj){
+                  //1.准备模板
+                  var tmpl = "<p><span>5555</span></p>";
+                  var tmplE = document.createElement('div');
+                  tmplE.innerHTML = tmpl;
+                  tmpl = tmplE.childNodes[0];
+                  //2.属性交换
+                  var attr = "cid";
+                  var attr_val = api_obj.item.getAttribute(attr) || "";
+                  if(attr){
+                    tmpl.setAttribute(attr,attr_val);
+                  }
+                  //3.插入
+                  var new_items_length = api_obj.endparent.children.length;
+                  var new_target;
+                  if(api_obj.index == new_items_length){
+                      new_target = api_obj.endparent.children[api_obj.new_index-1];
+                      api_obj.after(new_target,tmpl);
+                  }else{
+                      new_target = api_obj.endparent.children[api_obj.index];
+                      api_obj.before(new_target,tmpl);
+                  }
             }
 
         });

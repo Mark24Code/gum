@@ -604,7 +604,7 @@ var sortable = function(sortableElements, options) {
       var oldElementIndex = _index(dragging);
       var startparent = startParent;
       var endparent = newParent;
-
+      //dragend事件,内部public接口属性
       var args = {
         item: item,
         index: index,
@@ -632,29 +632,21 @@ var sortable = function(sortableElements, options) {
 
           //1.执行回调
           var process_callback = options.transferModel || function(){};
-          var tmpl_obj = process_callback(item);
-          //2.获取模板
-          var tmpl = tmpl_obj.template || "<div></div>";
-          var tmplE = document.createElement('div');
-          tmplE.innerHTML = tmpl;
-          tmpl = tmplE.childNodes[0];
-          //3.属性交换
-          var attr = tmpl_obj.attr || "";
-          var attr_val = item.getAttribute(attr) || "";
-          if(attr){
-            tmpl.setAttribute(attr,attr_val);
-          }
-          //4.插入
-          var new_items_length = endparent.children.length;
-          var new_target;
-          if(index == new_items_length){
-              new_target = endparent.children[new_index-1];
-              _after(new_target,tmpl);
-          }else{
-              new_target = endparent.children[index];
-              _before(new_target,tmpl);
-          }
-          //5.删除占位
+          var api_obj = {
+              item: item,//当前拖拽元素
+              index: index,//新索引(只考虑列表项目)
+              oldindex: oldindex,//原索引(只考虑列表项目)
+              elementIndex: elementIndex,//新索引(sortable项目)
+              oldElementIndex: oldElementIndex,//老索引(sortable项目)
+              startparent: startparent,//拖拽来源
+              endparent: endparent,//拖拽放置目标
+              before:_before,//内部插入方法 before插入
+              after:_after//内部插入方法，after插入
+          };
+          //暴露给外部执行函数，可以操纵内部dom
+          process_callback(api_obj);
+
+          //删除占位
           endparent.removeChild(item);
 
       }
