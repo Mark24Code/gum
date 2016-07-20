@@ -449,7 +449,8 @@ var sortable = function(sortableElements, options) {
       placeholderClass: 'sortable-placeholder',
       draggingClass: 'sortable-dragging',
       hoverClass: false,
-      transferModel:{template:"<div></div>"}
+      cloneModel:false,
+      transferModel:undefined//{template:"<div></div>"}
     };
     for (var option in options) {
       result[option] = options[option];
@@ -563,8 +564,8 @@ var sortable = function(sortableElements, options) {
         index:index
       }));
 
-      //clone data 模式 ********** start
-      if(options.transferModel){
+      //transferModel 模式 ********** start
+      if(options.connectWith && options.transferModel){
         //index 拖动时索引,startParent 拖动时母,dragging 拖动时对象
         //clone效果
         var items_length = startParent.children.length;
@@ -578,7 +579,8 @@ var sortable = function(sortableElements, options) {
           _before(target,dragging_clone);
         }
       }
-      //clone data 模式 ********** end
+      //transferModel 模式 ********** end
+
     });
     // Handle drag events on draggable items
     _on(items, 'dragend', function() {
@@ -594,48 +596,69 @@ var sortable = function(sortableElements, options) {
 
       placeholders.forEach(_detach);
       newParent = this.parentElement;
-      _dispatchEventOnConnected(sortableElement, _makeEvent('sortstop', {
-          item: dragging,
-          index: _filter(newParent.children, _data(newParent, 'items'))
-            .indexOf(dragging),
-          oldindex: items.indexOf(dragging),
-          elementIndex: _index(dragging),
-          oldElementIndex: index,
-          startparent: startParent,
-          endparent: newParent
-      }));
+
+      var item = dragging;
+      var index = _filter(newParent.children, _data(newParent, 'items')).indexOf(dragging);
+      var oldindex = items.indexOf(dragging);
+      var elementIndex =  _index(dragging);
+      var oldElementIndex = _index(dragging);
+      var startparent = startParent;
+      var endparent = newParent;
+
+      var args = {
+        item: item,
+        index: index,
+        oldindex: oldindex,
+        elementIndex: elementIndex,
+        oldElementIndex: oldElementIndex,
+        startparent: startparent,
+        endparent: endparent
+      };
+      _dispatchEventOnConnected(sortableElement, _makeEvent('sortstop', args));
       if (index !== _index(dragging) || startParent !== newParent) {
-        _dispatchEventOnConnected(sortableElement, _makeEvent('sortupdate', {
-          item: dragging,
-          index: _filter(newParent.children, _data(newParent, 'items'))
-            .indexOf(dragging),
-          oldindex: items.indexOf(dragging),
-          elementIndex: _index(dragging),
-          oldElementIndex: index,
-          startparent: startParent,
-          endparent: newParent
-        }));
-      }
 
-       //clone data 模式 ********** start
-      if(options.transferModel){
+        _dispatchEventOnConnected(sortableElement, _makeEvent('sortupdate', args));
 
-          var oldindex = items.indexOf(dragging);
-          var insert_tmpl = options.transferModel.template || "<div></div>";
-
+        }
+       //transferModel 模式 ********** start
+      if(options.connectWith && options.transferModel){
           //去重
-          if(startParent==newParent){
-            var delete_node = startParent.children[oldindex];
-            startParent.removeChild(delete_node);
+          if(startparent==endparent){
+            var delete_node = startparent.children[oldindex];
+            startparent.removeChild(delete_node);
           }
-          //数据传输
+          //重载源节点
+          sortable(startparent,options);
 
+          //1.执行回调
+          var process_callback = options.transferModel || function(){};
+          var tmpl_obj = process_callback(item);
+          //2.获取模板
+          var tmpl = tmpl_obj.template || "<div></div>";
+          var tmplE = document.createElement('div');
+          tmplE.innerHTML = tmpl;
+          tmpl = tmplE.childNodes[0];
+          //3.属性交换
+          var attr = tmpl_obj.attr || "";
+          var attr_val = item.getAttribute(attr) || "";
+          if(attr){
+            tmpl.setAttribute(attr,attr_val);
+          }
+          //4.插入
+          var new_items_length = endparent.children.length;
+          var new_target;
+          if(index == new_items_length){
+              new_target = endparent.children[new_index-1];
+              _after(new_target,tmpl);
+          }else{
+              new_target = endparent.children[index];
+              _before(new_target,tmpl);
+          }
+          //5.删除占位
+          endparent.removeChild(item);
 
-          //reload
-          sortable(startParent,options);
       }
-      //clone data 模式 ********** end
-
+      //transferModel 模式 ********** end
       dragging = null;
       draggingHeight = null;
 

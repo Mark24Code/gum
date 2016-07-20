@@ -61,11 +61,11 @@
 <h1>排序实例</h1>
 <div class="testbox1">
     <ul class="testbox-ul1">
-        <li class="item-1"><span>Item 1</span></li>
-        <li class="item-2"><span>Item 2</span></li>
-        <li class="item-3"><span>Item 3</span></li>
-        <li class="item-4"><span>Item 4</span></li>
-        <div><span>Item 5</span></div>
+        <li class="item-1" cid="10"><span>Item 1</span></li>
+        <li class="item-2" cid="11"><span>Item 2</span></li>
+        <li class="item-3" cid="12"><span>Item 3</span></li>
+        <li class="item-4" cid="13"><span>Item 4</span></li>
+        <div cid="15"><span>Item 5</span></div>
     </ul>
 </div>
 
@@ -102,44 +102,20 @@
             // items:'div',
             placeholderClass:'addModule',
             placeholder:"<div>4555</div>",
-            forcePlaceholderSize: true
+            forcePlaceholderSize: true,
+            transferModel:function(item){
+
+
+                return {
+                    attr:'cid',
+                    data:'data',
+                    template:'<div><span>{{text}}</span></div>'
+                };
+            }
+
         });
-        // // 追加去添加事件 clone Drag **************** start
-        // var startparent;
-        // var oldindex;
-        // var startchildren;
-        // sortable5('.testbox-ul1')[0].addEventListener('sortstart',function(e){
-        //     console.log('====== start ======');
-        //     startparent = e.detail.startparent;
-        //     startchildren = $(e.detail.startparent).children();
-        //     // copy sortable
-        //     var items_length = $(e.detail.startparent).children().length;
-        //     oldindex = e.detail.index;
-        //     var olditem_clone = $(e.detail.item).clone(true);
 
-        //     if(items_length == oldindex){
-        //         target = startchildren.eq(oldindex - 1);
-        //         target.after(olditem_clone);
-        //     }else{
-        //         target = startchildren.eq(oldindex);
-        //         target.before(olditem_clone);
-        //     }
-
-        // });
-        // sortable5('.testbox-ul1')[0].addEventListener('sortstop',function(e){
-        //     console.log('======= stop =======');
-        //     console.log(startparent);
-        //     console.log(e.detail.endparent);
-        //     if(startparent==e.detail.endparent){
-        //         startchildren.eq(oldindex).remove();
-        //     }
-        //     // reload
-        //     sortable5($(e.detail.startparent));
-        // });
-        // sortable5('.testbox-ul1')[0].addEventListener('sortupdate',function(e){
-        //     console.log('======= update =======');
-        // });
-        // // 追加去添加事件 clone Drag **************** end
+        // 追加去添加事件 clone Drag **************** end
         sortable5('.testbox-ul2',{
             connectWith:'cf',
             // handle:'span',
