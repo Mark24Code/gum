@@ -630,7 +630,7 @@ var sortable = function(sortableElements, options) {
               var new_items_length = endparent.children.length;
               var new_target;
               if(index == new_items_length){
-                  new_target = endparent.children[new_index-1];
+                  new_target = endparent.children[index-1];
                   _after(new_target,tmpl);
               }else{
                   new_target = endparent.children[index];
@@ -656,7 +656,8 @@ var sortable = function(sortableElements, options) {
 
           //删除占位
           endparent.removeChild(item);
-
+          //重载源节点
+          sortable(endparent,options);
 
 
       }
