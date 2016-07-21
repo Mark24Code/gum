@@ -1,11 +1,52 @@
 {% extends 'base.html' %}
 {% block title %}{{title}}{%endblock%}
 
+{% block head_style %}
+<style type="text/css" media="screen">
+    #virtualbox{
+        padding: 10px;
+        background-color:#F2F2F2;
+    }
+    #coreIframe{
+        width: 100%;
+        height:500px;
+    }
+    #container{
+        background-color:#C6E2CC;
+        padding: 10px;
+        height: 300px;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <h1>Transfer页面通信实例</h1>
 <h2>{{transfer}}</h2>
 <h3><a href="/" title="返回首页">返回首页</a></h3>
+<div>
+    <h2>Outer Area</h2>
+    <div id="container">
+       <div id="msg_box">
+       <h4>接收盒子</h4>
+        <textarea name="msg_panel"></textarea>
+        </div>
+        <h4>发送板</h4>
+        <div id="send_box">
+            <input type="text" name="input_msg">
+            <button type="button">发送消息</button>
+        </div>
+    </div>
+</div>
 <hr>
+<h2>Iframe Area</h2>
+<div id="virtualbox">
+    <iframe id="coreIframe" name="coreIframe" src="/inner" frameborder="0" scrolling="auto" ></iframe>
+</div>
 
+{% endblock %}
+
+{% block content_script %}
+<script type="text/javascript">
+
+</script>
 {% endblock %}

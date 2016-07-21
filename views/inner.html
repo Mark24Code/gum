@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}{{title}}{%endblock%}
+
+{% block head_style %}
+<style type="text/css" media="screen">
+#container{
+    background-color:#56B1CA;
+    padding: 10px;
+    height: 300px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>iFrame内部展示页</h1>
+<h2>{{transfer}}</h2>
+<h3><a href="/" title="返回首页">返回首页</a></h3>
+
+<div id="container">
+    <h1>消息盒子</h1>
+   <div id="msg_box">
+   <h4>接收盒子</h4>
+    <textarea name="msg_panel"></textarea>
+    </div>
+    <h4>发送板</h4>
+    <div id="send_box">
+        <input type="text" name="input_msg">
+        <button type="button">发送消息</button>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block content_script %}
+<script type="text/javascript">
+</script>
+{% endblock %}
