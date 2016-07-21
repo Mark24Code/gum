@@ -105,7 +105,7 @@
             placeholderClass:'addModule',
             placeholder:"<div>4555</div>",
             forcePlaceholderSize: true,
-            transferModel:function(api_obj){
+            cloneModel:function(api_obj){
                 //1.准备模板
                 var text = api_obj.item.innerText;
                 var tmpl = "<div><span>"+text+"</span></div>";

@@ -1,24 +1,25 @@
 define(function(require, exports, module) {
 
     /*
-     * HTML5 Sortable library
+     * HTML5 托拽库
      * https://github.com/voidberg/html5sortable
      *
-     * Original code copyright 2012 Ali Farhadi.
-     * This version is mantained by Alexandru Badiu <andu@ctrlz.ro> & Lukas Oppermann <lukas@vea.re>
-     * jQuery-independent implementation by Nazar Mokrynskyi <nazar@mokrynskyi.com>
-     *
+     * 原始代码 copyright 2012 Ali Farhadi.
+     * 来自于 Alexandru Badiu <andu@ctrlz.ro> & Lukas Oppermann <lukas@vea.re> 的版本
+     * 这个版本由 Mark24 <mark.zhangyoung@gmail.com>维护
      * Released under the MIT license.
+     * MIT 许可证.
      */
     'use strict';
     /*
-     * variables global to the plugin
+     * 全局变量
      */
     var dragging;
     var draggingHeight;
     var placeholders = [];
     var sortables = [];
     /**
+     * GET/SET 元素数据
      * Get or set data on element
      * @param {Element} element
      * @param {string} key
@@ -35,6 +36,7 @@ define(function(require, exports, module) {
         }
     };
     /**
+     * 移除元素数据
      * Remove data from element
      * @param {Element} element
      */
@@ -44,6 +46,7 @@ define(function(require, exports, module) {
         }
     };
     /**
+     * 跨浏览器 匹配元素函数
      * Cross-browser shortcut for actual `Element.matches` method,
      * which has vendor prefix in older browsers
      */
@@ -60,6 +63,7 @@ define(function(require, exports, module) {
             break;
     }
     /**
+     * 过滤节点
      * Filter only wanted nodes
      * @param {Array|NodeList} nodes
      * @param {Array/string} wanted
@@ -81,6 +85,7 @@ define(function(require, exports, module) {
         return result;
     };
     /**
+     * 元素监听事件
      * @param {Array|Element} element
      * @param {Array|string} event
      * @param {Function} callback
@@ -98,6 +103,7 @@ define(function(require, exports, module) {
         element.h5s.events[event] = callback;
     };
     /**
+     * 元素解除事件
      * @param {Array|Element} element
      * @param {Array|string} event
      */
@@ -114,6 +120,7 @@ define(function(require, exports, module) {
         }
     };
     /**
+     * 设置元素属性
      * @param {Array|Element} element
      * @param {string} attribute
      * @param {*} value
@@ -128,6 +135,7 @@ define(function(require, exports, module) {
         element.setAttribute(attribute, value);
     };
     /**
+     * 移除元素属性
      * @param {Array|Element} element
      * @param {string} attribute
      */
@@ -141,6 +149,7 @@ define(function(require, exports, module) {
         element.removeAttribute(attribute);
     };
     /**
+     * 获得元素偏移坐标
      * @param {Element} element
      * @returns {{left: *, top: *}}
      */
@@ -152,6 +161,7 @@ define(function(require, exports, module) {
         };
     };
     /*
+     * 移除items上事件的处理函数
      * remove event handlers from items
      * @param {Array|NodeList} items
      */
@@ -164,6 +174,7 @@ define(function(require, exports, module) {
         _off(items, 'drop');
     };
     /*
+     * 移除sortable上的事件处理函数
      * Remove event handlers from sortable
      * @param {Element} sortable a single sortable
      */
@@ -173,6 +184,7 @@ define(function(require, exports, module) {
         _off(sortable, 'drop');
     };
     /*
+     * 给dataTransfer object(拖拽物体) 添加ghos(影子对象）
      * Attach ghost to dataTransfer object
      * @param {Event} original event
      * @param {object} ghost-object with item, x and y coordinates
@@ -188,6 +200,7 @@ define(function(require, exports, module) {
         }
     };
     /**
+     * 克隆拖拽项目的坐标,添加到 ghost对象
      * _addGhostPos clones the dragged item and adds it as a Ghost item
      * @param {Event} event - the event fired when dragstart is triggered
      * @param {object} ghost - .draggedItem = Element
@@ -225,6 +238,7 @@ define(function(require, exports, module) {
         _attachGhost(event, ghost);
     };
     /*
+     * 从 sortable 移除数据
      * Remove data from sortable
      * @param {Element} sortable a single sortable
      */
@@ -233,6 +247,7 @@ define(function(require, exports, module) {
         _removeAttr(sortable, 'aria-dropeffect');
     };
     /*
+     * 从 items 移除数据
      * Remove data from items
      * @param {Array|Element} items
      */
@@ -242,11 +257,15 @@ define(function(require, exports, module) {
         _removeAttr(items, 'role');
     };
     /*
+     * 检查两个列表是否关联
+     * true:有关联 --> 自己拖拽到自己,或者自己拖拽到connectWith关联对象)
+     * false:无关联
+     * 检查两个列表是否关联
      * Check if two lists are connected
      * @param {Element} curList
      * @param {Element} destList
      */
-    var _listsConnected = function(curList, destList) {
+    var _CheckConnected = function(curList, destList) {
         if (curList === destList) {
             return true;
         }
@@ -255,8 +274,16 @@ define(function(require, exports, module) {
         }
         return false;
     };
-    //检查联系
-    var _CheckConnected = function(curList, destList) {
+    /*
+     * 检查两个列表是否关联,增强版
+     * 0 说明，自己拖动到自己
+     * 1 说明，拖拽到connectWith关联对象
+     * -1 说明，彼此无联系,不可拖拽
+     * Check if two lists are connected
+     * @param {Element} curList
+     * @param {Element} destList
+     */
+    var _CheckConnectedPlus = function(curList, destList) {
         if (curList === destList) {
             return 0; //自己对自己
         }
@@ -283,6 +310,7 @@ define(function(require, exports, module) {
         return result;
     };
     /*
+     * 销毁 the sortable
      * Destroy the sortable
      * @param {Element} sortableElement a single sortable
      */
@@ -299,6 +327,7 @@ define(function(require, exports, module) {
         _removeItemData(items);
     };
     /*
+     * 启用 the sortable
      * Enable the sortable
      * @param {Element} sortableElement a single sortable
      */
@@ -327,6 +356,7 @@ define(function(require, exports, module) {
         }
     };
     /*
+     * 停用 the sortable
      * Disable the sortable
      * @param {Element} sortableElement a single sortable
      */
@@ -339,6 +369,7 @@ define(function(require, exports, module) {
         _off(handles, 'mousedown');
     };
     /*
+     * 重载 the sortable
      * Reload the sortable
      * @param {Element} sortableElement a single sortable
      * @description events need to be removed to not be double bound
@@ -354,6 +385,7 @@ define(function(require, exports, module) {
         _removeSortableEvents(sortableElement);
     };
     /**
+     * 获取元素相对于兄弟元素的 相对索引
      * Get position of the element relatively to its sibling elements
      * @param {Element} element
      * @returns {number}
@@ -365,6 +397,7 @@ define(function(require, exports, module) {
         return Array.prototype.indexOf.call(element.parentElement.children, element);
     };
     /**
+     * 元素是否在 DOM中
      * Whether element is in DOM
      * @param {Element} element
      * @returns {boolean}
@@ -373,6 +406,7 @@ define(function(require, exports, module) {
         return !!element.parentNode;
     };
     /**
+     * 转化HTML字符串 为DOM元素
      * Convert HTML string into DOM element
      * @param {Element|string} html
      * @returns {Element}
@@ -386,6 +420,7 @@ define(function(require, exports, module) {
         return div.firstChild;
     };
     /**
+     * 目标前插入
      * Insert before target
      * @param {Element} target
      * @param {Element} element
@@ -397,6 +432,7 @@ define(function(require, exports, module) {
         );
     };
     /**
+     * 目标后插入
      * Insert after target
      * @param {Element} target
      * @param {Element} element
@@ -408,6 +444,7 @@ define(function(require, exports, module) {
         );
     };
     /**
+     * DOM中移除元素
      * Detach element from DOM
      * @param {Element} element
      */
@@ -417,6 +454,7 @@ define(function(require, exports, module) {
         }
     };
     /**
+     * 原生触发事件，分发器
      * Make native event that can be dispatched afterwards
      * @param {string} name
      * @param {object} detail
@@ -436,12 +474,13 @@ define(function(require, exports, module) {
      */
     var _dispatchEventOnConnected = function(sortableElement, event) {
         sortables.forEach(function(target) {
-            if (_listsConnected(sortableElement, target)) {
+            if (_CheckConnected(sortableElement, target)) {
                 target.dispatchEvent(event);
             }
         });
     };
     /*
+     * 公共 sortable 对象
      * Public sortable object
      * @param {Array|NodeList} sortableElements
      * @param {object|string} options|method
@@ -460,8 +499,7 @@ define(function(require, exports, module) {
                 placeholderClass: 'sortable-placeholder',
                 draggingClass: 'sortable-dragging',
                 hoverClass: false,
-                cloneModel: false,
-                transferModel: undefined //function(arg_obj){...}
+                cloneModel: undefined //function(arg_obj){...}
             };
             for (var option in options) {
                 result[option] = options[option];
@@ -574,8 +612,8 @@ define(function(require, exports, module) {
                     index: index
                 }));
 
-                //transferModel 模式 ********** start
-                if (options.connectWith && options.transferModel) {
+                //********** cloneModel 模式 ********** start
+                if (options.connectWith && options.cloneModel) {
                     //index 拖动时索引,startParent 拖动时母,dragging 拖动时对象
                     //clone效果
                     var items_length = startParent.children.length;
@@ -590,7 +628,7 @@ define(function(require, exports, module) {
                         _before(target, dragging_clone);
                     }
                 }
-                //transferModel 模式 ********** end
+                //********** cloneModel 模式 ********** end
 
             });
             // Handle drag events on draggable items
@@ -616,7 +654,7 @@ define(function(require, exports, module) {
                 var startparent = startParent;
                 var endparent = newParent;
 
-                //dragend事件,内部public接口属性
+                //dragend事件,内部public接口属性统一
                 var args = {
                     item: item,
                     index: index,
@@ -632,7 +670,7 @@ define(function(require, exports, module) {
                     _dispatchEventOnConnected(sortableElement, _makeEvent('sortupdate', args));
 
                 }
-                //transferModel 模式 ********** start
+                //********** cloneModel 模式 ********** start
                 function insertTmpl(tmpl) {
                     if (startparent !== endparent) {
                         var new_items_length = endparent.children.length;
@@ -647,20 +685,19 @@ define(function(require, exports, module) {
                     }
 
                 }
-                if (options.connectWith && options.transferModel) {
+                if (options.connectWith && options.cloneModel) {
                     //去重
                     var clone_node = document.querySelector("[clone]");
                     if (startparent === endparent) {
                         startparent.removeChild(clone_node);
-                    }else{
+                    } else {
                         clone_node.removeAttribute('clone');
                     }
 
                     //重载源节点
                     sortable(startparent, options);
 
-                    //暴露给外部callback
-
+                    //暴露给外部的内部接口对象
                     var api_obj = {
                         item: item, //当前拖拽元素
                         index: index, //新索引(只考虑列表项目)
@@ -675,7 +712,8 @@ define(function(require, exports, module) {
                     };
 
                     //暴露给外部执行函数，可以操纵内部dom
-                    var process_callback = options.transferModel || function() {};
+                    var process_callback = options.cloneModel || function() {};
+                    //只用用户逻辑
                     process_callback(api_obj);
 
                     //删除占位
@@ -688,7 +726,7 @@ define(function(require, exports, module) {
 
 
                 }
-                //transferModel 模式 ********** end
+                //********** cloneModel 模式 ********** end
                 dragging = null;
                 draggingHeight = null;
 
@@ -698,12 +736,12 @@ define(function(require, exports, module) {
             // TODO: REMOVE placeholder?????
             _on([sortableElement, placeholder], 'drop', function(e) {
                 var visiblePlaceholder;
-                if (!_listsConnected(sortableElement, dragging.parentElement)) {
+                if (!_CheckConnected(sortableElement, dragging.parentElement)) {
                     return;
                 }
                 // tranferModel 模式 ******** start
-                if (options.transferModel) {
-                    var checkConnTag = _CheckConnected(sortableElement, dragging.parentElement);
+                if (options.cloneModel) {
+                    var checkConnTag = _CheckConnectedPlus(sortableElement, dragging.parentElement);
                     if (checkConnTag === 0 || checkConnTag === -1) {
                         return;
                     }
@@ -720,7 +758,7 @@ define(function(require, exports, module) {
 
             // Handle dragover and dragenter events on draggable items
             var onDragOverEnter = function(e) {
-                if (!_listsConnected(sortableElement, dragging.parentElement)) {
+                if (!_CheckConnected(sortableElement, dragging.parentElement)) {
                     return;
                 }
 
@@ -800,7 +838,7 @@ define(function(require, exports, module) {
         _removeItemEvents: _removeItemEvents,
         _removeItemData: _removeItemData,
         _removeSortableData: _removeSortableData,
-        _listsConnected: _listsConnected,
+        _CheckConnected: _CheckConnected,
         _attachGhost: _attachGhost,
         _addGhostPos: _addGhostPos,
         _getGhost: _getGhost,
