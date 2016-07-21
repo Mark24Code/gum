@@ -1,9 +1,11 @@
-{% block title %}通信{% endblock %}
+{% extends 'base.html' %}
+{% block title %}{{title}}{%endblock%}
 
-{% block head_style %}
-
-{% endblock %}
 
 {% block content %}
 <h1>Transfer页面通信实例</h1>
+<h2>{{transfer}}</h2>
+<h3><a href="/" title="返回首页">返回首页</a></h3>
+<hr>
+
 {% endblock %}
