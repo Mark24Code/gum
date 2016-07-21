@@ -1,6 +1,6 @@
 
 exports.index = function(req,res,next){
     res.status(200);
-    res.render('example',{'example':'This is example'});
+    res.render('transfer',{'title':'This is transfer example'});
 };
 

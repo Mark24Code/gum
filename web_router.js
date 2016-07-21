@@ -7,7 +7,8 @@
 var express = require('express');
 
 var site = require('./controllers/site');
-var example = require('./controllers/example');
+var sortable = require('./controllers/sortable');
+var transfer = require('./controllers/transfer');
 
 var router = express.Router();
 
@@ -16,8 +17,10 @@ var router = express.Router();
 //首页
 router.get('/',site.index);
 
-//expamle
-router.get('/example',example.index);
+//拖拽
+router.get('/sortable',sortable.index);
+//通信
+router.get('/transfer',transfer.index);
 
 
 module.exports = router;
