@@ -40,37 +40,29 @@
 <hr>
 <h2>Iframe Area</h2>
 <div id="virtualbox">
-    <iframe id="coreIframe" name="coreIframe" src="/inner" frameborder="0" scrolling="auto" ></iframe>
+    <iframe id="coreIframe" name="coreIframe" src="/transfer/inner" frameborder="0" scrolling="auto" ></iframe>
 </div>
 
 {% endblock %}
 
 {% block content_script %}
 <script src="/static/javascripts/jquery/1.8.0/jquery.min.js"></script>
+<script src="/static/javascripts/MessengerJS/2.0.0/messenger.js"></script>
 <script type="text/javascript">
 
-// var eleFrom = $("#msg_box");
-// $("#send_box button").click(function(){
-//     var send_text = $("#msg_panel").html();
-//     window.frames[0].postMessage(message,"sss");
-//     return false;
-// });
-
 $(document).ready(function(){
-    function recMsg(event){
-        console.log(event);
-        console.log(event.source);
-        if(event.origin == "http://localhost:3000"){
-            console.log(event.data);
-            console.log("msg here");
-        }
-    }
+    var messenger = new Messenger('outer','TransferDemo');
+    var iframe1 = document.getElementById('coreIframe');
 
-    window.addEventListener("message",recMsg,false);
-    console.log("send");
-    document.getElementById("coreIframe").contentWindow.postMessage("Heoowordl","*");
-    console.log("send end");
+    messenger.listen(function(msg){
+        $("#msg_panel").html('接收:'+msg);
+    });
+    messenger.addTarget(iframe1.contentWindow,'inner');
 
+    $("#send_box button").click(function(){
+        var msg_text = $("#send_box input").val();
+        messenger.targets['inner'].send(msg_text);
+    });
 });
 
 

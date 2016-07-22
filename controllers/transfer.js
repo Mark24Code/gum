@@ -19,3 +19,13 @@ exports.child = function(req,res,next){
     res.render('message/child',{'title':'通信','transfer':'This is transfer example'});
 };
 
+exports.inner = function(req,res,next){
+    res.status(200);
+    res.render('inner',{'title':'通信','transfer':'This is transfer example'});
+};
+
+exports.outer = function(req,res,next){
+    res.status(200);
+    res.render('transfer',{'title':'通信','transfer':'This is transfer example'});
+};
+

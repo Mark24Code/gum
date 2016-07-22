@@ -20,6 +20,8 @@ router.get('/',site.index);
 //拖拽
 router.get('/sortable',sortable.index);
 //通信
+router.get('/transfer/inner',transfer.inner);
+router.get('/transfer/outer',transfer.outer);
 router.get('/transfer/parent',transfer.index);
 router.get('/transfer/iframe1',transfer.iframe1);
 router.get('/transfer/iframe2',transfer.iframe2);
