@@ -9,6 +9,7 @@ var express = require('express');
 var site = require('./controllers/site');
 var sortable = require('./controllers/sortable');
 var transfer = require('./controllers/transfer');
+var layout = require('./controllers/layout');
 
 var router = express.Router();
 
@@ -26,6 +27,7 @@ router.get('/transfer/parent',transfer.index);
 router.get('/transfer/iframe1',transfer.iframe1);
 router.get('/transfer/iframe2',transfer.iframe2);
 router.get('/transfer/child',transfer.child);
-
+//css布局
+router.get('/layout',layout.index);
 
 module.exports = router;
