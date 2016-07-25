@@ -4,43 +4,69 @@ body{
     margin:0;
     padding:0;
 }
-#box {
+#box1 {
     width: 100px;
     height: 100px;
     background-color: grey;
     overflow: hidden;
 }
-#box .item{
+#box1 .item{
     width: 33.33%;
     height: 100px;
     padding: 0;
     margin:0;
     float: left;
 }
-#box .item.a{
+#box1 .item.a{
     background-color: red;
     padding: 5px;
     border: 1px solid blue;
     box-sizing: border-box;
 }
-#box .item.b{
+#box1 .item.b{
     background-color: green;
     border: 1px solid red;
     box-sizing: border-box;
 }
-#box .item.c{
+#box1 .item.c{
     background-color: black;
-    border: 1px solid white;
+    border: 1px solid green;
     box-sizing: border-box;
+}
+.boxSize{
+    box-sizing: border-box;
+    -webkit-box-sizing:border-box;
+}
+ul{
+    width:100%;
+}
+ul li{
+    width:33.3%;
+    height:100px;
+    float: left;
+    border-right:1px solid #ddd;
+    border-bottom:1px solid #ddd;
+    list-style: none;
+    box-sizing: border-box;
+    -webkit-box-sizing:border-box;
+
+}
+ul li:nth-of-type(2){
+    border-right:none;
 }
 </style>
 {% endblock %} {% block content %}
-<div id="box">
+<div id="box1">
     <div class="item a">iiii</div>
     <div class="item b"></div>
     <div class="item c"></div>
 </div>
-
+<hr>
+<ul>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
 {% endblock %} {% block content_script %}
 <script src="/static/javascripts/jquery/1.8.0/jquery.min.js"></script>
 <script type="text/javascript">
